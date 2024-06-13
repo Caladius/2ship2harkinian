@@ -20,6 +20,9 @@ void InitEnhancements() {
     RegisterSavingEnhancements();
     RegisterAutosave();
 
+    // Difficulty Options
+    RegisterBenDrownedMode();
+
     // Masks
     RegisterFastTransformation();
     RegisterFierceDeityAnywhere();
