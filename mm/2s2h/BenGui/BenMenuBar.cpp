@@ -482,6 +482,30 @@ void DrawEnhancementsMenu() {
             ImGui::EndMenu();
         }
 
+        if (UIWidgets::BeginMenu("Difficulty Options")) {
+            ImGui::SeparatorText("Experimental");
+            UIWidgets::CVarCheckbox(
+                "Ben Drowned", "gEnhancements.Difficulty.BDWarn1",
+                { .tooltip = "???" });
+            if (CVarGetInteger("gEnhancements.Difficulty.BDWarn1", 0)) {
+                ImGui::TextColored({ 0.85f, 0.85f, 0.0f, 1.0f }, "          " ICON_FA_EXCLAMATION_TRIANGLE);
+                ImGui::SameLine();
+                ImGui::TextColored({ 0.85f, 0.35f, 0.0f, 1.0f }, " WARNING!!!! ");
+                ImGui::SameLine();
+                ImGui::TextColored({ 0.85f, 0.85f, 0.0f, 1.0f }, ICON_FA_EXCLAMATION_TRIANGLE);
+                ImGui::Text("This is highly volatile game mode.");
+                ImGui::Text("Enabling this has a high chance of save data corruption.");
+                ImGui::Text("Save Data corruption is not limited to the File selected.");
+                ImGui::Text("Support for this mode will not be provided.");
+                UIWidgets::CVarCheckbox("I promise I have read the warning", "gEnhancements.Difficulty.BDWarn2");
+            }
+            if (CVarGetInteger("gEnhancements.Difficulty.BDWarn2", 0)) {
+                UIWidgets::CVarCheckbox("Enable Ben Drowned", "gEnhancements.Difficulty.BenDrowned");
+            }
+
+            ImGui::EndMenu();
+        }
+
         if (UIWidgets::BeginMenu("Dpad")) {
             UIWidgets::CVarCheckbox("Dpad Equips", "gEnhancements.Dpad.DpadEquips",
                                     { .tooltip = "Allows you to equip items to your d-pad" });
