@@ -14,6 +14,10 @@ extern "C" {
 #include "objects/object_sek/object_sek.h"
 
 Gfx* ResourceMgr_LoadGfxByName(const char* path);
+#include "objects/object_boss01/object_boss01.h"
+#include "objects/object_boss02/object_boss02.h"
+#include "objects/object_boss03/object_boss03.h"
+#include "objects/object_boss_hakugin/object_boss_hakugin.h"
 }
 
 s32 StrayFairyOverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
@@ -70,6 +74,117 @@ void DrawStrayFairy(RandoItemId randoItemId) {
     }
     POLY_XLU_DISP = SkelAnime_DrawFlex(gPlayState, skelAnime.skeleton, skelAnime.jointTable, skelAnime.dListCount,
                                        StrayFairyOverrideLimbDraw, NULL, NULL, POLY_XLU_DISP);
+
+    CLOSE_DISPS(gPlayState->state.gfxCtx);
+}
+
+void DrawOdolwa(RandoItemId randoItemId) {
+    OPEN_DISPS(gPlayState->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(gPlayState->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(gPlayState->state.gfxCtx);
+    Matrix_Translate(0.0f, -20.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_Scale(0.005f, 0.005f, 0.005f, MTXMODE_APPLY);
+
+    static bool initialized = false;
+    static SkelAnime skelAnime;
+    static Vec3s jointTable[52];
+    static Vec3s otherTable[52];
+    static u32 lastUpdate = 0;
+    if (!initialized) {
+        initialized = true;
+        SkelAnime_InitFlex(gPlayState, &skelAnime, (FlexSkeletonHeader*)&gOdolwaSkel,
+                           (AnimationHeader*)&gOdolwaReadyAnim, jointTable, otherTable, 52);
+    }
+    if (gPlayState != NULL && lastUpdate != gPlayState->state.frames) {
+        lastUpdate = gPlayState->state.frames;
+        SkelAnime_Update(&skelAnime);
+    }
+    SkelAnime_DrawFlexOpa(gPlayState, skelAnime.skeleton, skelAnime.jointTable, skelAnime.dListCount,
+                          NULL, NULL, NULL);
+
+    CLOSE_DISPS(gPlayState->state.gfxCtx);
+}
+
+void DrawGyorg(RandoItemId randoItemId) {
+    OPEN_DISPS(gPlayState->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(gPlayState->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(gPlayState->state.gfxCtx);
+    Matrix_Translate(0.0f, -20.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_Scale(0.05f, 0.05f, 0.05f, MTXMODE_APPLY);
+
+    static bool initialized = false;
+    static SkelAnime skelAnime;
+    static Vec3s jointTable[15];
+    static Vec3s otherTable[15];
+    static u32 lastUpdate = 0;
+    if (!initialized) {
+        initialized = true;
+        SkelAnime_InitFlex(gPlayState, &skelAnime, (FlexSkeletonHeader*)&gGyorgSkel,
+                           (AnimationHeader*)&gGyorgCrawlingAnim, jointTable, otherTable, 15);
+    }
+    if (gPlayState != NULL && lastUpdate != gPlayState->state.frames) {
+        lastUpdate = gPlayState->state.frames;
+        SkelAnime_Update(&skelAnime);
+    }
+    SkelAnime_DrawFlexOpa(gPlayState, skelAnime.skeleton, skelAnime.jointTable, skelAnime.dListCount,
+                          NULL, NULL, NULL);
+
+    CLOSE_DISPS(gPlayState->state.gfxCtx);
+}
+
+void DrawGoht(RandoItemId randoItemId) {
+    OPEN_DISPS(gPlayState->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(gPlayState->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(gPlayState->state.gfxCtx);
+    Matrix_Translate(0.0f, -20.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_Scale(0.005f, 0.005f, 0.005f, MTXMODE_APPLY);
+
+    static bool initialized = false;
+    static SkelAnime skelAnime;
+    static Vec3s jointTable[33];
+    static Vec3s otherTable[33];
+    static u32 lastUpdate = 0;
+    if (!initialized) {
+        initialized = true;
+        SkelAnime_InitFlex(gPlayState, &skelAnime, (FlexSkeletonHeader*)&gGohtSkel,
+                           (AnimationHeader*)&gGohtRunAnim, jointTable, otherTable, 33);
+    }
+    if (gPlayState != NULL && lastUpdate != gPlayState->state.frames) {
+        lastUpdate = gPlayState->state.frames;
+        SkelAnime_Update(&skelAnime);
+    }
+    SkelAnime_DrawFlexOpa(gPlayState, skelAnime.skeleton, skelAnime.jointTable, skelAnime.dListCount,
+                          NULL, NULL, NULL);
+
+    CLOSE_DISPS(gPlayState->state.gfxCtx);
+}
+
+void DrawTwinmold(RandoItemId randoItemId) {
+    OPEN_DISPS(gPlayState->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(gPlayState->state.gfxCtx);
+    Matrix_Scale(0.05f, 0.05f, 0.05f, MTXMODE_APPLY);
+
+    static bool initialized = false;
+    static SkelAnime skelAnime;
+    static Vec3s jointTable[13];
+    static Vec3s otherTable[13];
+    static u32 lastUpdate = 0;
+    if (!initialized) {
+        initialized = true;
+        SkelAnime_InitFlex(gPlayState, &skelAnime, (FlexSkeletonHeader*)&gTwinmoldHeadSkel,
+                           (AnimationHeader*)&gTwinmoldHeadFlyAnim, jointTable, otherTable, 13);
+    }
+    if (gPlayState != NULL && lastUpdate != gPlayState->state.frames) {
+        lastUpdate = gPlayState->state.frames;
+        SkelAnime_Update(&skelAnime);
+    }
+
+    gSPSegment(POLY_OPA_DISP++, 0x08, (uintptr_t)gTwinmoldBlueSkinTex);
+    SkelAnime_DrawOpa(gPlayState, skelAnime.skeleton, skelAnime.jointTable, NULL, NULL, NULL);
 
     CLOSE_DISPS(gPlayState->state.gfxCtx);
 }
@@ -285,10 +400,16 @@ void Rando::DrawItem(RandoItemId randoItemId) {
             DrawSmallKey(randoItemId);
             break;
         case RI_GREAT_BAY_BOSS_KEY:
+            DrawGyorg(randoItemId);
+            break;
         case RI_SNOWHEAD_BOSS_KEY:
+            DrawGoht(randoItemId);
+            break;
         case RI_STONE_TOWER_BOSS_KEY:
+            DrawTwinmold(randoItemId);
+            break;
         case RI_WOODFALL_BOSS_KEY:
-            DrawBossKey(randoItemId);
+            DrawOdolwa(randoItemId);
             break;
         case RI_SONG_TIME:
         case RI_SONG_STORMS:
