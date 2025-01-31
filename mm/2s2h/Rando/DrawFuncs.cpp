@@ -440,6 +440,65 @@ extern void DrawGaroMaster() {
     DrawFireRing(1.0f, 0.3f, 1.0f, -3200.0f);
 }
 
+extern void DrawGidbo() {
+    static bool initialized = false;
+    static SkelAnime skelAnime;
+    static Vec3s jointTable[REDEAD_LIMB_MAX];
+    static Vec3s morphTable[REDEAD_LIMB_MAX];
+    static u32 lastUpdate = 0;
+    static u32 animUpdate = 0;
+    static uint32_t rdAnimID = 0;
+    static AnimationHeader* currentAnim = (AnimationHeader*)gGibdoRedeadIdleAnim;
+
+    std::vector<AnimationHeader*> rdAnims = {
+        (AnimationHeader*)gGibdoRedeadSquattingDanceAnim,
+        (AnimationHeader*)gGibdoRedeadClappingDanceAnim,
+        (AnimationHeader*)gGibdoRedeadPirouetteAnim,
+    };
+
+    OPEN_DISPS(gPlayState->state.gfxCtx);
+    Gfx_SetupDL25_Opa(gPlayState->state.gfxCtx);
+    Gfx_SetupDL60_XluNoCD(gPlayState->state.gfxCtx);
+    Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
+    Matrix_Translate(0, -2900.0f, 0, MTXMODE_APPLY);
+
+    if (!initialized) {
+        initialized = true;
+        SkelAnime_InitFlex(gPlayState, &skelAnime, (FlexSkeletonHeader*)&gGibdoSkel,
+                           (AnimationHeader*)gGibdoRedeadPirouetteAnim, jointTable, morphTable, REDEAD_LIMB_MAX);
+    }
+
+    if (gPlayState != NULL && lastUpdate != gPlayState->state.frames) {
+        Player* player = GET_PLAYER(gPlayState);
+        if (player->currentMask == PLAYER_MASK_GIBDO || player->currentMask == PLAYER_MASK_CAPTAIN ||
+            player->currentMask == PLAYER_MASK_GARO) {
+            if (animUpdate != gPlayState->state.frames) {
+                if (animUpdate <= gPlayState->state.frames - 35) {
+                    animUpdate = gPlayState->state.frames;
+                    currentAnim = rdAnims[rdAnimID];
+                    if (rdAnimID >= rdAnims.size() - 1) {
+                        rdAnimID = 0;
+                    } else {
+                        rdAnimID++;
+                    }
+                    Animation_MorphToLoop(&skelAnime, currentAnim, -6.0f);
+                }
+            }
+        } else {
+            currentAnim = (AnimationHeader*)gGibdoRedeadIdleAnim;
+            Animation_MorphToLoop(&skelAnime, currentAnim, -6.0f);
+        }
+        lastUpdate = gPlayState->state.frames;
+        SkelAnime_Update(&skelAnime);
+    }
+
+    gSPSegment(POLY_OPA_DISP++, 0x08, (uintptr_t)D_801AEFA0);
+    SkelAnime_DrawFlexOpa(gPlayState, skelAnime.skeleton, skelAnime.jointTable, skelAnime.dListCount, NULL, NULL, NULL);
+
+    CLOSE_DISPS(gPlayState->state.gfxCtx);
+    DrawFireRing(2.0f, 0.5f, 2.0f, -200.0f);
+}
+
 extern void DrawGrasshopper() {
     static bool initialized = false;
     static SkelAnime skelAnime;
@@ -710,7 +769,8 @@ extern void DrawRedead() {
 
     if (gPlayState != NULL && lastUpdate != gPlayState->state.frames) {
         Player* player = GET_PLAYER(gPlayState);
-        if (player->currentMask == PLAYER_MASK_GIBDO) {
+        if (player->currentMask == PLAYER_MASK_GIBDO || player->currentMask == PLAYER_MASK_CAPTAIN ||
+            player->currentMask == PLAYER_MASK_GARO) {
             if (animUpdate != gPlayState->state.frames) {
                 if (animUpdate <= gPlayState->state.frames - 35) {
                     animUpdate = gPlayState->state.frames;

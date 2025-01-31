@@ -11,6 +11,7 @@ void DrawDekuBaba();
 void DrawDinolfos();
 void DrawDodongo();
 void DrawGaroMaster();
+void DrawGidbo();
 void DrawGrasshopper();
 void DrawGuay();
 void DrawIronKnuckle();
