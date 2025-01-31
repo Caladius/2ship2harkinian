@@ -26,6 +26,7 @@ void DrawSlime();
 void DrawSnapper();
 void DrawTektite();
 void DrawWallmaster();
+void DrawWart();
 void DrawWolfos();
 
 #endif

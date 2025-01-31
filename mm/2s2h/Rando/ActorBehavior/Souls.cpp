@@ -38,6 +38,7 @@ std::unordered_map<RandoItemId, std::tuple<std::function<void()>, std::vector<Ac
     { RI_SOUL_TEKTITE, { DrawTektite, { ACTOR_EN_TITE }, RANDO_INF_OBTAINED_SOUL_OF_TEKTITES } },
     { RI_SOUL_WALLMASTER,
       { DrawWallmaster, { ACTOR_EN_WALLMAS, ACTOR_EN_FLOORMAS }, RANDO_INF_OBTAINED_SOUL_OF_WALLMASTERS } },
+    { RI_SOUL_WART, { DrawWart, { ACTOR_BOSS_04 }, RANDO_INF_OBTAINED_SOUL_OF_WART } },
     { RI_SOUL_WOLFOS, { DrawWolfos, { ACTOR_EN_WF }, RANDO_INF_OBTAINED_SOUL_OF_WOLFOS } },
 };
 
