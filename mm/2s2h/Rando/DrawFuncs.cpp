@@ -34,6 +34,7 @@ extern "C" {
 #include "assets/objects/object_uch/object_uch.h"
 #include "src/overlays/actors/ovl_En_Kame/z_en_kame.h"
 #include "src/overlays/actors/ovl_Boss_04/z_boss_04.h"
+#include "assets/objects/object_skb/object_skb.h"
 
 #include "src/overlays/actors/ovl_En_Bom/z_en_bom.h"
 
@@ -855,6 +856,34 @@ extern void DrawSnapper() {
 
     CLOSE_DISPS(gPlayState->state.gfxCtx);
     DrawFireRing(4.5f, 0.7f, 4.5f, -200.0f, 0);
+}
+
+extern void DrawStalchild() {
+    static bool initialized = false;
+    static SkelAnime skelAnime;
+    static Vec3s jointTable[STALCHILD_LIMB_MAX];
+    static Vec3s morphTable[STALCHILD_LIMB_MAX];
+    static u32 lastUpdate = 0;
+
+    OPEN_DISPS(gPlayState->state.gfxCtx);
+    Gfx_SetupDL25_Opa(gPlayState->state.gfxCtx);
+    Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
+    Matrix_Translate(0, -3200, 0, MTXMODE_APPLY);
+
+    if (!initialized) {
+        initialized = true;
+        SkelAnime_Init(gPlayState, &skelAnime, (SkeletonHeader*)&gStalchildSkel, (AnimationHeader*)&gStalchildIdleAnim,
+                       jointTable, morphTable, STALCHILD_LIMB_MAX);
+    }
+    if (gPlayState != NULL && lastUpdate != gPlayState->state.frames) {
+        lastUpdate = gPlayState->state.frames;
+        SkelAnime_Update(&skelAnime);
+    }
+
+    SkelAnime_DrawOpa(gPlayState, skelAnime.skeleton, skelAnime.jointTable, NULL, NULL, NULL);
+
+    CLOSE_DISPS(gPlayState->state.gfxCtx);
+    DrawFireRing(3.0f, 0.6f, 3.0f, -100);
 }
 
 extern void DrawTektite() {

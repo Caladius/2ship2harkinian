@@ -24,6 +24,7 @@ void DrawShellBlade();
 void DrawSkulltula();
 void DrawSlime();
 void DrawSnapper();
+void DrawStalchild();
 void DrawTektite();
 void DrawWallmaster();
 void DrawWart();
