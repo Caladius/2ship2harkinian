@@ -926,7 +926,7 @@ extern void DrawWallmaster() {
     SkelAnime_DrawFlexOpa(gPlayState, skelAnime.skeleton, skelAnime.jointTable, skelAnime.dListCount, NULL, NULL, NULL);
 
     CLOSE_DISPS(gPlayState->state.gfxCtx);
-    DrawFireRing(7.0f, 1.0f, 7.0f, -200.0f);
+    DrawFireRing(7.0f, 1.0f, 7.0f, -200.0f, 0);
 }
 
 extern void DrawWolfos() {
