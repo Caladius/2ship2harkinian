@@ -33,6 +33,7 @@ extern "C" {
 #include "src/overlays/actors/ovl_En_Grasshopper/z_en_grasshopper.h"
 #include "assets/objects/object_uch/object_uch.h"
 #include "src/overlays/actors/ovl_En_Kame/z_en_kame.h"
+#include "src/overlays/actors/ovl_Boss_04/z_boss_04.h"
 
 #include "src/overlays/actors/ovl_En_Bom/z_en_bom.h"
 
@@ -63,7 +64,7 @@ void DrawSmoke(f32 x, f32 y, f32 z, f32 tY) {
     CLOSE_DISPS(gPlayState->state.gfxCtx);
 }
 
-void DrawFireRing(f32 x, f32 y, f32 z, f32 tY) {
+void DrawFireRing(f32 x, f32 y, f32 z, f32 tY, f32 tZ) {
     static u32 lastUpdate = 0;
     static uint32_t unk_1A4 = Rand_ZeroOne() * 128.0f;
 
@@ -71,7 +72,7 @@ void DrawFireRing(f32 x, f32 y, f32 z, f32 tY) {
 
     Gfx_SetupDL25_Xlu(gPlayState->state.gfxCtx);
     Matrix_Scale(x, y, z, MTXMODE_APPLY);
-    Matrix_Translate(0, tY, 0, MTXMODE_APPLY);
+    Matrix_Translate(0, tY, tZ, MTXMODE_APPLY);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 220, 0, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
@@ -171,7 +172,7 @@ extern void DrawAlien() {
     SkelAnime_DrawFlexOpa(gPlayState, skelAnime.skeleton, skelAnime.jointTable, skelAnime.dListCount, NULL, NULL, NULL);
 
     CLOSE_DISPS(gPlayState->state.gfxCtx);
-    DrawFireRing(10.0f, 1.5f, 10.0f, -2900);
+    DrawFireRing(10.0f, 1.5f, 10.0f, -2900, 0);
 }
 
 extern void DrawArmos() {
@@ -199,7 +200,7 @@ extern void DrawArmos() {
     SkelAnime_DrawOpa(gPlayState, skelAnime.skeleton, skelAnime.jointTable, NULL, NULL, NULL);
 
     CLOSE_DISPS(gPlayState->state.gfxCtx);
-    DrawFireRing(5.0f, 0.9f, 5.0f, 0);
+    DrawFireRing(5.0f, 0.9f, 5.0f, 0, 0);
 }
 
 extern void DrawBat() {
@@ -235,7 +236,7 @@ extern void DrawBat() {
     POLY_OPA_DISP = &gfx[5];
 
     CLOSE_DISPS(gPlayState->state.gfxCtx);
-    DrawFireRing(2.0f, 0.5f, 2.0f, -3000.0f);
+    DrawFireRing(2.0f, 0.5f, 2.0f, -3000.0f, 0);
 }
 
 extern void DrawBeamos() {
@@ -263,7 +264,7 @@ extern void DrawBeamos() {
     SkelAnime_DrawOpa(gPlayState, skelAnime.skeleton, skelAnime.jointTable, NULL, NULL, NULL);
 
     CLOSE_DISPS(gPlayState->state.gfxCtx);
-    DrawFireRing(3.0f, 0.6f, 3.0f, -100);
+    DrawFireRing(3.0f, 0.6f, 3.0f, -100, 0);
 }
 
 extern void DrawRealBombchu() {
@@ -293,7 +294,7 @@ extern void DrawRealBombchu() {
                           DrawEnRealBombchu_PostLimbDraw, NULL);
 
     CLOSE_DISPS(gPlayState->state.gfxCtx);
-    DrawFireRing(2.0f, 0.5f, 2.0f, -200.0f);
+    DrawFireRing(2.0f, 0.5f, 2.0f, -200.0f, 0);
 }
 
 extern void DrawDeathArmos() {
@@ -322,7 +323,7 @@ extern void DrawDeathArmos() {
     SkelAnime_DrawOpa(gPlayState, skelAnime.skeleton, skelAnime.jointTable, NULL, NULL, NULL);
 
     CLOSE_DISPS(gPlayState->state.gfxCtx);
-    DrawFireRing(5.0f, 0.9f, 5.0f, 0);
+    DrawFireRing(5.0f, 0.9f, 5.0f, 0, 0);
 }
 
 extern void DrawDekuBaba() {
@@ -350,7 +351,7 @@ extern void DrawDekuBaba() {
     SkelAnime_DrawOpa(gPlayState, skelAnime.skeleton, skelAnime.jointTable, NULL, NULL, NULL);
 
     CLOSE_DISPS(gPlayState->state.gfxCtx);
-    DrawFireRing(2.5f, 0.4f, 2.5f, -4200);
+    DrawFireRing(2.5f, 0.4f, 2.5f, -4200, 0);
 }
 
 extern void DrawDinolfos() {
@@ -380,7 +381,7 @@ extern void DrawDinolfos() {
     SkelAnime_DrawFlexOpa(gPlayState, skelAnime.skeleton, skelAnime.jointTable, skelAnime.dListCount, NULL, NULL, NULL);
 
     CLOSE_DISPS(gPlayState->state.gfxCtx);
-    DrawFireRing(2.5f, 0.5f, 2.5f, -200.0f);
+    DrawFireRing(2.5f, 0.5f, 2.5f, -200.0f, 0);
 }
 
 extern void DrawDodongo() {
@@ -408,7 +409,7 @@ extern void DrawDodongo() {
     SkelAnime_DrawOpa(gPlayState, skelAnime.skeleton, skelAnime.jointTable, NULL, NULL, NULL);
 
     CLOSE_DISPS(gPlayState->state.gfxCtx);
-    DrawFireRing(4.0f, 0.5f, 4.0f, -200.0f);
+    DrawFireRing(4.0f, 0.5f, 4.0f, -200.0f, 0);
 }
 
 extern void DrawGaroMaster() {
@@ -437,7 +438,7 @@ extern void DrawGaroMaster() {
     SkelAnime_DrawFlexOpa(gPlayState, skelAnime.skeleton, skelAnime.jointTable, skelAnime.dListCount, NULL, NULL, NULL);
 
     CLOSE_DISPS(gPlayState->state.gfxCtx);
-    DrawFireRing(1.0f, 0.3f, 1.0f, -3200.0f);
+    DrawFireRing(1.0f, 0.3f, 1.0f, -3200.0f, 0);
 }
 
 extern void DrawGrasshopper() {
@@ -465,7 +466,7 @@ extern void DrawGrasshopper() {
     SkelAnime_DrawOpa(gPlayState, skelAnime.skeleton, skelAnime.jointTable, NULL, NULL, NULL);
 
     CLOSE_DISPS(gPlayState->state.gfxCtx);
-    DrawFireRing(4.0f, 0.7f, 4.0f, -4000.0f);
+    DrawFireRing(4.0f, 0.7f, 4.0f, -4000.0f, 0);
 }
 
 extern void DrawGuay() {
@@ -494,7 +495,7 @@ extern void DrawGuay() {
     SkelAnime_DrawFlexOpa(gPlayState, skelAnime.skeleton, skelAnime.jointTable, skelAnime.dListCount, NULL, NULL, NULL);
 
     CLOSE_DISPS(gPlayState->state.gfxCtx);
-    DrawFireRing(2.0f, 0.3f, 2.0f, -4300.0f);
+    DrawFireRing(2.0f, 0.3f, 2.0f, -4300.0f, 0);
 }
 
 extern void DrawIronKnuckle() {
@@ -533,7 +534,7 @@ extern void DrawIronKnuckle() {
     SkelAnime_DrawFlexOpa(gPlayState, skelAnime.skeleton, skelAnime.jointTable, skelAnime.dListCount, NULL, NULL, NULL);
 
     CLOSE_DISPS(gPlayState->state.gfxCtx);
-    DrawFireRing(2.5f, 0.8f, 2.5f, -200.0f);
+    DrawFireRing(2.5f, 0.8f, 2.5f, -200.0f, 0);
 }
 
 extern void DrawKeese() {
@@ -561,7 +562,7 @@ extern void DrawKeese() {
     SkelAnime_DrawOpa(gPlayState, skelAnime.skeleton, skelAnime.jointTable, NULL, DrawEnFirefly_PostLimbDraw, NULL);
 
     CLOSE_DISPS(gPlayState->state.gfxCtx);
-    DrawFireRing(3.0f, 0.5f, 3.0f, -5200.0f);
+    DrawFireRing(3.0f, 0.5f, 3.0f, -5200.0f, 0);
 }
 
 extern void DrawLeever() {
@@ -590,7 +591,7 @@ extern void DrawLeever() {
     SkelAnime_DrawOpa(gPlayState, skelAnime.skeleton, skelAnime.jointTable, NULL, NULL, NULL);
 
     CLOSE_DISPS(gPlayState->state.gfxCtx);
-    DrawFireRing(1.0f, 0.3f, 1.0f, -200.0f);
+    DrawFireRing(1.0f, 0.3f, 1.0f, -200.0f, 0);
 }
 
 extern void DrawMadScrub() {
@@ -618,7 +619,7 @@ extern void DrawMadScrub() {
     SkelAnime_DrawOpa(gPlayState, skelAnime.skeleton, skelAnime.jointTable, NULL, NULL, NULL);
 
     CLOSE_DISPS(gPlayState->state.gfxCtx);
-    DrawFireRing(2.5f, 0.4f, 2.5f, -2300);
+    DrawFireRing(2.5f, 0.4f, 2.5f, -2300, 0);
 }
 
 extern void DrawOctorok() {
@@ -650,7 +651,7 @@ extern void DrawOctorok() {
     SkelAnime_DrawOpa(gPlayState, skelAnime.skeleton, skelAnime.jointTable, NULL, NULL, NULL);
 
     CLOSE_DISPS(gPlayState->state.gfxCtx);
-    DrawFireRing(6.0f, 0.7f, 6.0f, -5600.0f);
+    DrawFireRing(6.0f, 0.7f, 6.0f, -5600.0f, 0);
 }
 
 extern void DrawPeehat() {
@@ -677,7 +678,7 @@ extern void DrawPeehat() {
     SkelAnime_DrawOpa(gPlayState, skelAnime.skeleton, skelAnime.jointTable, NULL, NULL, NULL);
 
     CLOSE_DISPS(gPlayState->state.gfxCtx);
-    DrawFireRing(3.0f, 1.0f, 3.0f, -2800.0f);
+    DrawFireRing(3.0f, 1.0f, 3.0f, -2800.0f, 0);
 }
 
 extern void DrawRedead() {
@@ -735,7 +736,7 @@ extern void DrawRedead() {
     SkelAnime_DrawFlexOpa(gPlayState, skelAnime.skeleton, skelAnime.jointTable, skelAnime.dListCount, NULL, NULL, NULL);
 
     CLOSE_DISPS(gPlayState->state.gfxCtx);
-    DrawFireRing(2.0f, 0.5f, 2.0f, -200.0f);
+    DrawFireRing(2.0f, 0.5f, 2.0f, -200.0f, 0);
 }
 
 extern void DrawShellBlade() {
@@ -763,7 +764,7 @@ extern void DrawShellBlade() {
     SkelAnime_DrawFlexOpa(gPlayState, skelAnime.skeleton, skelAnime.jointTable, skelAnime.dListCount, NULL, NULL, NULL);
 
     CLOSE_DISPS(gPlayState->state.gfxCtx);
-    DrawFireRing(7.0f, 1.0f, 7.0f, -200.0f);
+    DrawFireRing(7.0f, 1.0f, 7.0f, -200.0f, 0);
 }
 
 extern void DrawSkulltula() {
@@ -791,7 +792,7 @@ extern void DrawSkulltula() {
     SkelAnime_DrawOpa(gPlayState, skelAnime.skeleton, skelAnime.jointTable, NULL, NULL, NULL);
 
     CLOSE_DISPS(gPlayState->state.gfxCtx);
-    DrawFireRing(2.0f, 0.5f, 2.0f, -2800.0f);
+    DrawFireRing(2.0f, 0.5f, 2.0f, -2800.0f, 0);
 }
 
 extern void DrawSlime() {
@@ -822,7 +823,7 @@ extern void DrawSlime() {
     gSPDisplayList(POLY_XLU_DISP++, (Gfx*)gChuchuEyesDL);
 
     CLOSE_DISPS(gPlayState->state.gfxCtx);
-    DrawFireRing(5.0f, 1.0f, 5.0f, -200.0f);
+    DrawFireRing(5.0f, 1.0f, 5.0f, -200.0f, 0);
     timer--;
 }
 
@@ -853,7 +854,7 @@ extern void DrawSnapper() {
     SkelAnime_DrawFlexOpa(gPlayState, skelAnime.skeleton, skelAnime.jointTable, skelAnime.dListCount, NULL, NULL, NULL);
 
     CLOSE_DISPS(gPlayState->state.gfxCtx);
-    DrawFireRing(4.5f, 0.7f, 4.5f, -200.0f);
+    DrawFireRing(4.5f, 0.7f, 4.5f, -200.0f, 0);
 }
 
 extern void DrawTektite() {
@@ -897,7 +898,7 @@ extern void DrawTektite() {
     SkelAnime_DrawOpa(gPlayState, skelAnime.skeleton, skelAnime.jointTable, NULL, NULL, NULL);
 
     CLOSE_DISPS(gPlayState->state.gfxCtx);
-    DrawFireRing(4.0f, 0.5f, 4.0f, -200.0f);
+    DrawFireRing(4.0f, 0.5f, 4.0f, -200.0f, 0);
 }
 
 extern void DrawWallmaster() {
@@ -955,5 +956,5 @@ extern void DrawWolfos() {
     SkelAnime_DrawFlexOpa(gPlayState, skelAnime.skeleton, skelAnime.jointTable, skelAnime.dListCount, NULL, NULL, NULL);
 
     CLOSE_DISPS(gPlayState->state.gfxCtx);
-    DrawFireRing(5.0f, 1.0f, 5.0f, -200.0f);
+    DrawFireRing(5.0f, 1.0f, 5.0f, -200.0f, 0);
 }
