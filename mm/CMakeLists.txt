@@ -1,4 +1,4 @@
-﻿cmake_minimum_required(VERSION 3.16.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.26.0 FATAL_ERROR)
 
 set(CMAKE_SYSTEM_VERSION 10.0 CACHE STRING "" FORCE)
 
@@ -28,6 +28,14 @@ if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
 		message(FATAL_ERROR "${CMAKE_VS_PLATFORM_NAME} arch is not supported!")
 	endif()
 endif()
+
+
+FetchContent_Declare(
+    dr_libs
+    GIT_REPOSITORY https://github.com/mackron/dr_libs.git
+	GIT_TAG da35f9d6c7374a95353fd1df1d394d44ab66cf01
+)
+FetchContent_MakeAvailable(dr_libs)
 
 ################################################################################
 # Global configuration types
@@ -315,6 +323,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE assets
     ${SDL2-NET-INCLUDE}
     ${BOOST-INCLUDE}
 	${CMAKE_CURRENT_SOURCE_DIR}/assets/
+	${dr_libs_SOURCE_DIR}
 	.
 )
 
@@ -521,24 +530,30 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
         )
     endif()
 endif()
+
+# This file contains a few SIMD functions. Those functions are much more inefficient without optimizations. MSVC and GCC allow for optimizing a single function, but clang does not.
+set_source_files_properties(2s2h/mixer.c PROPERTIES
+COMPILE_FLAGS "-O2"
+)
+
 ################################################################################
 # Pre build events
 ################################################################################
 if (CMAKE_GENERATOR MATCHES "Visual Studio")
-    set(VS_COPY_ASSETS_CMD ${CMAKE_COMMAND} -E copy_directory $<TARGET_FILE_DIR:2ship>/assets ${CMAKE_BINARY_DIR}/mm/assets)
+    set(VS_COPY_ASSETS_CMD ${CMAKE_COMMAND} -E copy_directory_if_different $<TARGET_FILE_DIR:2ship>/assets ${CMAKE_BINARY_DIR}/mm/assets)
 endif()
 if(NOT CMAKE_SYSTEM_NAME MATCHES "NintendoSwitch|CafeOS")
     add_custom_command(
         TARGET ${PROJECT_NAME}
         POST_BUILD
         COMMENT "Copying asset xmls..."
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/mm/assets/extractor $<TARGET_FILE_DIR:2ship>/assets/extractor
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/mm/assets/xml $<TARGET_FILE_DIR:2ship>/assets/extractor/xmls
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/OTRExporter/CFG/filelists $<TARGET_FILE_DIR:2ship>/assets/extractor/filelists
+        COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different ${CMAKE_SOURCE_DIR}/mm/assets/extractor $<TARGET_FILE_DIR:2ship>/assets/extractor
+        COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different ${CMAKE_SOURCE_DIR}/mm/assets/xml $<TARGET_FILE_DIR:2ship>/assets/extractor/xmls
+        COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different ${CMAKE_SOURCE_DIR}/OTRExporter/CFG/filelists $<TARGET_FILE_DIR:2ship>/assets/extractor/filelists
         COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:2ship>/assets/extractor/symbols
-        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/OTRExporter/CFG/ActorList_MM.txt $<TARGET_FILE_DIR:2ship>/assets/extractor/symbols
-        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/OTRExporter/CFG/ObjectList_MM.txt $<TARGET_FILE_DIR:2ship>/assets/extractor/symbols
-        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/OTRExporter/CFG/SymbolMap_MM.txt $<TARGET_FILE_DIR:2ship>/assets/extractor/symbols
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/OTRExporter/CFG/ActorList_MM.txt $<TARGET_FILE_DIR:2ship>/assets/extractor/symbols
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/OTRExporter/CFG/ObjectList_MM.txt $<TARGET_FILE_DIR:2ship>/assets/extractor/symbols
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/OTRExporter/CFG/SymbolMap_MM.txt $<TARGET_FILE_DIR:2ship>/assets/extractor/symbols
         COMMAND ${VS_COPY_ASSETS_CMD}
     )
 endif()
@@ -556,6 +571,17 @@ endif()
 
 if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
     find_package(glfw3 REQUIRED)
+
+    find_package(Ogg CONFIG REQUIRED)
+    link_libraries(Ogg::ogg)
+
+    find_package(Vorbis CONFIG REQUIRED)
+    link_libraries(Vorbis::vorbisfile)
+    find_package(Opus CONFIG REQUIRED)
+    link_libraries(Opus::opus)
+	find_package(OpusFile CONFIG REQUIRED)
+    link_libraries(OpusFile::opusfile CONFIG REQUIRED)
+
 	set(ADDITIONAL_LIBRARY_DEPENDENCIES
 		"libultraship;"
 		"ZAPDLib;"
@@ -567,7 +593,13 @@ if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
 		"winmm;"
 		"imm32;"
 		"version;"
-		"setupapi"
+		"setupapi;"
+        "Ogg::ogg"
+        "Opus::opus"
+        "Vorbis::vorbis"
+        "Vorbis::vorbisenc"
+        "Vorbis::vorbisfile"
+		"OpusFile::opusfile"
 	)
 elseif(CMAKE_SYSTEM_NAME STREQUAL "NintendoSwitch")
     find_package(SDL2)
@@ -593,15 +625,27 @@ elseif(CMAKE_SYSTEM_NAME STREQUAL "CafeOS")
 else()
     find_package(SDL2)
     set(THREADS_PREFER_PTHREAD_FLAG ON)
+    
     find_package(Threads REQUIRED)
- 	set(ADDITIONAL_LIBRARY_DEPENDENCIES
+    find_package(Ogg REQUIRED)
+    find_package(Vorbis REQUIRED)
+    find_package(Opus REQUIRED)
+    find_package(OpusFile REQUIRED)
+    set(ADDITIONAL_LIBRARY_DEPENDENCIES
         "libultraship;"
 		"ZAPDLib;"
+        "Ogg::ogg"
+        "Vorbis::vorbis"
+        "Vorbis::vorbisenc"
+        "Vorbis::vorbisfile"
+        "Opus::opus"
+        "Opusfile::Opusfile"
 		SDL2::SDL2
  #       "$<$<BOOL:${BUILD_CROWD_CONTROL}>:SDL2_net::SDL2_net>"
 		${CMAKE_DL_LIBS}
 		Threads::Threads
 	)
+
 endif()
 
 if(NOT CMAKE_SYSTEM_NAME MATCHES "Darwin|NintendoSwitch|CafeOS")

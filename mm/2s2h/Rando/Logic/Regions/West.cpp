@@ -122,6 +122,7 @@ static RegisterShipInitFunc initFunc([]() {
     };
     Regions[RR_GREAT_BAY_COAST] = RandoRegion{ .sceneId = SCENE_30GYOSON,
         .checks = {
+            CHECK(RC_GREAT_BAY_COAST_FISHERMAN_MINIGAME, RANDO_EVENTS[RE_CLEARED_GREAT_BAY_TEMPLE] && (HAS_ITEM(ITEM_HOOKSHOT) || CAN_USE_MAGIC_ARROW(ICE))),
             CHECK(RC_GREAT_BAY_COAST_OWL_STATUE, CAN_USE_SWORD),
             CHECK(RC_GREAT_BAY_COAST_MIKAU, CAN_PLAY_SONG(HEALING)),
             CHECK(RC_GREAT_BAY_COAST_PIECE_OF_HEART, CAN_HOOK_SCARECROW && CAN_GROW_BEAN_PLANT),
@@ -236,7 +237,7 @@ static RegisterShipInitFunc initFunc([]() {
         },
         .exits = { //     TO                                         FROM
             EXIT(ENTRANCE(ZORA_HALL,        1),             ENTRANCE(ZORA_CAPE, 2), true),
-            EXIT(ENTRANCE(GREAT_BAY_TEMPLE, 0),             ENTRANCE(ZORA_CAPE, 7), CAN_BE_ZORA && HAS_ITEM(ITEM_HOOKSHOT) && (CAN_PLAY_SONG(BOSSA_NOVA) || RANDO_SAVE_OPTIONS[RO_ACCESS_DUNGEONS] == RO_ACCESS_DUNGEONS_FORM_ONLY)),
+            EXIT(ENTRANCE(GREAT_BAY_TEMPLE, 0),             ENTRANCE(ZORA_CAPE, 7), HAS_ITEM(ITEM_HOOKSHOT) && CanAccessDungeon(DUNGEON_INDEX_GREAT_BAY_TEMPLE)),
         },
         .connections = {
             CONNECTION(RR_ZORA_CAPE, CAN_BE_ZORA),
