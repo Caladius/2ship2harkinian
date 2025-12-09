@@ -27,6 +27,7 @@ std::map<RandoOptionId, RandoStaticOption> Options = {
     RO(RO_HINTS_OATH_TO_ORDER,         RO_GENERIC_OFF),
     RO(RO_HINTS_PURCHASEABLE,          RO_GENERIC_OFF),
     RO(RO_HINTS_SPIDER_HOUSES,         RO_GENERIC_OFF),
+    RO(RO_HINTS_TRANSFORMATIONS,       RO_GENERIC_OFF),
     RO(RO_TRAP_AMOUNT,                 5),
     RO(RO_LOGIC,                       RO_LOGIC_GLITCHLESS),
     RO(RO_MINIMUM_SKULLTULA_TOKENS,    SPIDER_HOUSE_TOKENS_REQUIRED),

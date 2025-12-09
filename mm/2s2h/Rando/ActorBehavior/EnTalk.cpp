@@ -7,6 +7,67 @@ extern "C" {
 #include "variables.h"
 }
 
+void ApplyTransformationHints(u16* textId, bool* loadFromMessageTable) {
+    static std::string placeholderMsg = "Last seen in";
+    static int transformHintIndex = 0;
+
+    if (transformHintIndex > 3) {
+        transformHintIndex = 0;
+    }
+
+    u8 icon = 0xFE;
+    std::string msg;
+    RandoItemId randoItemId = RI_NONE;
+
+    if (transformHintIndex == 0) {
+        msg = "   %yDeparted Soul Alert%w!\n"
+              "The souls of the departed lay restless, "
+              "find and heal them!";
+    } else {
+        msg = "       %g{{mask}}%w:\n"
+              "Last seen in\n" 
+              "%y{{location}}%w";
+
+        switch (transformHintIndex) {
+            case 1:
+                CustomMessage::Replace(&msg, "{{mask}}", " Butler's Son");
+                randoItemId = RI_MASK_DEKU;
+                break;
+            case 2:
+                CustomMessage::Replace(&msg, "{{mask}}", "  Darmani");
+                randoItemId = RI_MASK_GORON;
+                break;
+            case 3:
+                CustomMessage::Replace(&msg, "{{mask}}", "  Mikau");
+                randoItemId = RI_MASK_ZORA;
+                break;
+            default:
+                break;
+        }
+
+        icon = Rando::StaticData::GetIconForZMessage(randoItemId);
+        RandoCheckId randoCheckId = Rando::FindItemPlacement(randoItemId);
+        if (RANDO_SAVE_CHECKS[randoCheckId].obtained == true) {
+            CustomMessage::Replace(&msg, "{{location}}", "your %gpocket%w!");
+        } else {
+            CustomMessage::Replace(&msg, "{{location}}",
+                                   Ship_GetSceneName(Rando::StaticData::Checks[randoCheckId].sceneId));
+            msg += ".";
+        }
+    }
+
+    CustomMessage::Entry entry = {
+        .icon = icon,
+        .nextMessageID = transformHintIndex >= 3 ? (u16)0xFFFF : (u16)0x1C18,
+        .msg = msg,
+    };
+
+    CustomMessage::LoadCustomMessageIntoFont(entry);
+    *loadFromMessageTable = false;
+    transformHintIndex++;
+
+}
+
 void ApplyRemainsHint(u16* textId, bool* loadFromMessageTable) {
     static int remainsHintIndex = 0;
 
@@ -66,4 +127,6 @@ void ApplyRemainsHint(u16* textId, bool* loadFromMessageTable) {
 void Rando::ActorBehavior::InitEnTalkBehavior() {
     // "Recruiting Soldiers..." Posters around Clock Town
     COND_ID_HOOK(OnOpenText, 0x1C06, IS_RANDO && RANDO_SAVE_OPTIONS[RO_HINTS_BOSS_REMAINS], ApplyRemainsHint);
+
+    COND_ID_HOOK(OnOpenText, 0x1C18, IS_RANDO && RANDO_SAVE_OPTIONS[RO_HINTS_TRANSFORMATIONS], ApplyTransformationHints);
 }

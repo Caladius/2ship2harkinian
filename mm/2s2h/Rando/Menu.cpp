@@ -724,8 +724,7 @@ static void DrawCheckFilterTab() {
 
 static void DrawHintsTab() {
     f32 columnWidth = ImGui::GetContentRegionAvail().x / 3 - (ImGui::GetStyle().ItemSpacing.x * 2);
-    f32 halfHeight = ImGui::GetContentRegionAvail().y / 2 - (ImGui::GetStyle().ItemSpacing.y * 2);
-    ImGui::BeginChild("randoHintsColumn1", ImVec2(columnWidth, halfHeight));
+    ImGui::BeginChild("randoHintsColumn1", ImVec2(columnWidth, ImGui::GetContentRegionAvail().y));
     CVarCheckbox(
         "Spider House", Rando::StaticData::Options[RO_HINTS_SPIDER_HOUSES].cvar,
         CheckboxOptions(
@@ -750,15 +749,10 @@ static void DrawHintsTab() {
                  CheckboxOptions({ { .tooltip = "Once you have the Moon Access Requirements, talking to Skull Kid on "
                                                 "the Clock Tower Rooftop will hint the location of Oath to Order" } }));
     CVarCheckbox(
-        "General Actor Hints", "gPlaceholderBool",
-        CheckboxOptions({ { .disabled = true,
-                            .disabledTooltip = "Soon you will be able to disable these. Currently hinted:\n- Bomb Shop "
-                                               "4th Item\n- Lottery\n- Great Fairy Fountains\n- Mountain Smithy" } })
-            .DefaultValue(true));
-    CVarCheckbox("Saria's Song", "gPlaceholderBool",
-                 CheckboxOptions({ { .disabled = true, .disabledTooltip = "Coming Soon" } }));
-    CVarCheckbox("Song of Soaring", "gPlaceholderBool",
-                 CheckboxOptions({ { .disabled = true, .disabledTooltip = "Coming Soon" } }));
+        "Transformation Masks", Rando::StaticData::Options[RO_HINTS_TRANSFORMATIONS].cvar,
+                 CheckboxOptions({ { .tooltip = "Checking the sign near the Business Scrub in South Clock Town "
+                                                "will reveal the location of Transformation Masks.\n"
+                                                "Note: This excludes Fierce Deity."} }));
     CVarCheckbox(
         "Hookshot Location", Rando::StaticData::Options[RO_HINTS_HOOKSHOT].cvar,
         CheckboxOptions(
