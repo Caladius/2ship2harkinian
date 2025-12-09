@@ -4,6 +4,8 @@
 #include "Rando/CheckTracker/CheckTracker.h"
 #include "build.h"
 #include "2s2h/BenGui/BenMenu.h"
+#include "PresetManager/PresetManager.h"
+#include "PresetManager/PresetDescriptions.h"
 
 extern "C" {
 #include "overlays/actors/ovl_En_Sth/z_en_sth.h"
@@ -748,11 +750,10 @@ static void DrawHintsTab() {
     CVarCheckbox("Oath to Order", Rando::StaticData::Options[RO_HINTS_OATH_TO_ORDER].cvar,
                  CheckboxOptions({ { .tooltip = "Once you have the Moon Access Requirements, talking to Skull Kid on "
                                                 "the Clock Tower Rooftop will hint the location of Oath to Order" } }));
-    CVarCheckbox(
-        "Transformation Masks", Rando::StaticData::Options[RO_HINTS_TRANSFORMATIONS].cvar,
+    CVarCheckbox("Transformation Masks", Rando::StaticData::Options[RO_HINTS_TRANSFORMATIONS].cvar,
                  CheckboxOptions({ { .tooltip = "Checking the sign near the Business Scrub in South Clock Town "
                                                 "will reveal the location of Transformation Masks.\n"
-                                                "Note: This excludes Fierce Deity."} }));
+                                                "Note: This excludes Fierce Deity." } }));
     CVarCheckbox(
         "Hookshot Location", Rando::StaticData::Options[RO_HINTS_HOOKSHOT].cvar,
         CheckboxOptions(
@@ -761,10 +762,30 @@ static void DrawHintsTab() {
     ImGui::EndChild();
 }
 
+void DrawRacesTab() {
+    ImGui::BeginChild("randoRacesColumn1", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y));
+    ImGui::Text("Apply the Deckscrubber Race Preset and then create your File.");
+    ImGui::PushID("DeckscrubberSet");
+    if (UIWidgets::Button("Apply Preset", { .color = COLOR_GREEN })) {
+        PresetManager_ApplyPreset(deckScrubberJ);
+    }
+    DrawDeckScrubberDescription();
+    ImGui::PopID();
+    ImGui::EndChild();
+}
+
 void Rando::RegisterMenu() {
     mBenMenu->AddMenuEntry("Rando", "gSettings.Menu.RandoSidebarSection");
+
+    // New Race Menu
+    mBenMenu->AddSidebarEntry("Rando", "Races", 1);
+    WidgetPath path = { "Rando", "Races", SECTION_COLUMN_1 };
+    path.sidebarName = "Races";
+    mBenMenu->AddWidget(path, "Races", WIDGET_CUSTOM).CustomFunction([](WidgetInfo& info) { DrawRacesTab(); });
+
+    // Existing Rando Menu
     mBenMenu->AddSidebarEntry("Rando", "General", 1);
-    WidgetPath path = { "Rando", "General", SECTION_COLUMN_1 };
+    path = { "Rando", "General", SECTION_COLUMN_1 };
     mBenMenu->AddWidget(path, "General", WIDGET_CUSTOM).CustomFunction([](WidgetInfo& info) { DrawGeneralTab(); });
     mBenMenu->AddSidebarEntry("Rando", "Logic/Conditions", 1);
     path.sidebarName = "Logic/Conditions";

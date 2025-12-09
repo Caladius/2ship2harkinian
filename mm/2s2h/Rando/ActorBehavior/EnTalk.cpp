@@ -25,7 +25,7 @@ void ApplyTransformationHints(u16* textId, bool* loadFromMessageTable) {
               "find and heal them!";
     } else {
         msg = "       %g{{mask}}%w:\n"
-              "Last seen in\n" 
+              "Last seen in\n"
               "%y{{location}}%w";
 
         switch (transformHintIndex) {
@@ -65,7 +65,6 @@ void ApplyTransformationHints(u16* textId, bool* loadFromMessageTable) {
     CustomMessage::LoadCustomMessageIntoFont(entry);
     *loadFromMessageTable = false;
     transformHintIndex++;
-
 }
 
 void ApplyRemainsHint(u16* textId, bool* loadFromMessageTable) {
@@ -128,5 +127,6 @@ void Rando::ActorBehavior::InitEnTalkBehavior() {
     // "Recruiting Soldiers..." Posters around Clock Town
     COND_ID_HOOK(OnOpenText, 0x1C06, IS_RANDO && RANDO_SAVE_OPTIONS[RO_HINTS_BOSS_REMAINS], ApplyRemainsHint);
 
-    COND_ID_HOOK(OnOpenText, 0x1C18, IS_RANDO && RANDO_SAVE_OPTIONS[RO_HINTS_TRANSFORMATIONS], ApplyTransformationHints);
+    COND_ID_HOOK(OnOpenText, 0x1C18, IS_RANDO && RANDO_SAVE_OPTIONS[RO_HINTS_TRANSFORMATIONS],
+                 ApplyTransformationHints);
 }
