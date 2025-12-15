@@ -17,6 +17,7 @@ std::unordered_map<int32_t, const char*> logicOptions = {
     { RO_LOGIC_NO_LOGIC, "No Logic" },
     { RO_LOGIC_NEARLY_NO_LOGIC, "Nearly No Logic" },
     { RO_LOGIC_VANILLA, "Vanilla" },
+    { RO_LOGIC_DECKSCRUBBER, "Deckscrubber" },
 };
 
 std::unordered_map<int32_t, const char*> accessDungeonOptions = {

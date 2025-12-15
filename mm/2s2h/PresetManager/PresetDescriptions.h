@@ -13,12 +13,12 @@ std::vector<std::pair<std::string, std::string>> deckScrubberReqs = {
 };
 
 std::vector<std::string> deckScrubberShuffles = {
-    "Shuffle Songs", "Shuffle Stray Fairies", "Shuffle Owl Statues", "Shuffle Shops", "Shuffle Boss Remains",
+    "Shuffle Boss Remains", "Shuffle Owl Statues", "Shuffle Shops", "Shuffle Songs", "Shuffle Stray Fairies",
 };
 
 std::vector<std::string> deckScrubberStarting = {
-    "Full Wallets",    "Maps and Compasses", "Kokiri Sword", "Hero's Shield",
-    "Ocarina of Time", "Song of Time",       "Bunny Hood",
+    "Bunny Hood", "Full Wallets", "Hero's Shield", "Maps and Compasses", "Kokiri Sword", "Random Boss Remain",
+    "Ocarina of Time", "", "Song of Time",   
 };
 
 std::vector<std::pair<std::string, std::string>> deckScrubberHints = {
@@ -49,22 +49,29 @@ void DrawDeckScrubberDescription() {
         ImGui::EndTable();
     }
     ImGui::Separator();
-    if (ImGui::BeginTable("DesckscrubberReq", 2)) {
+    if (ImGui::BeginTable("DeckscrubberSeedSettings", 2)) {
         ImGui::TableNextColumn();
         ImGui::TextColored(TEXT_COLOR(ORANGE), "Included Shuffles");
-        for (auto& shuffle : deckScrubberShuffles) {
-            ImGui::Text(shuffle.c_str());
+        if (ImGui::BeginTable("DesckscrubberShuffles", 2)) {
+            for (auto& shuffle : deckScrubberShuffles) {
+                ImGui::TableNextColumn();
+                ImGui::Text(shuffle.c_str());
+            }
+            ImGui::EndTable();
         }
         ImGui::TableNextColumn();
         ImGui::TextColored(TEXT_COLOR(ORANGE), "Starting Items");
-        for (auto& item : deckScrubberStarting) {
-            ImGui::Text(item.c_str());
+        if (ImGui::BeginTable("DesckscrubberStarting", 2)) {
+            for (auto& item : deckScrubberStarting) {
+                ImGui::TableNextColumn();
+                ImGui::Text(item.c_str());
+            }
+            ImGui::EndTable();
         }
         ImGui::EndTable();
     }
     ImGui::Separator();
     ImGui::TextColored(TEXT_COLOR(ORANGE), "Hints");
-
     for (auto& [key, value] : deckScrubberHints) {
         ImGui::TextColored(TEXT_COLOR(GREEN), key.c_str());
         ImGui::TextWrapped(value.c_str());

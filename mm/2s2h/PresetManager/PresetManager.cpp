@@ -276,6 +276,7 @@ nlohmann::json deckScrubberJ = R"(
         },
         "gEnhancements": {
             "Cutscenes": {
+                "SkipEnemyCutscenes": 1,
                 "SkipEntranceCutscenes": 1,
                 "SkipFirstCycle": 1,
                 "SkipGetItemCutscenes": 1,
@@ -323,6 +324,7 @@ nlohmann::json deckScrubberJ = R"(
                 "TownArcheryScore": 50
             },
             "Playback": {
+                "DpadOcarina": 1,
                 "NoDropOcarinaInput": 1,
                 "SkipScarecrowSong": 1
             },
@@ -333,6 +335,7 @@ nlohmann::json deckScrubberJ = R"(
                 "InstantPutaway": 1
             },
             "PlayerActions": {
+                "ArrowCycle": 1,
                 "InstantRecall": 1
             },
             "Restorations": {
@@ -350,6 +353,7 @@ nlohmann::json deckScrubberJ = R"(
             "Timesavers": {
                 "DampeDiggingSkip": 1,
                 "FastChests": 1,
+                "FasterSceneTransitions": 1,
                 "GalleryTwofer": 1,
                 "MarineLabHP": 1,
                 "SkipBalladOfWindfish": 1,
@@ -365,6 +369,7 @@ nlohmann::json deckScrubberJ = R"(
             "Enabled": 1,
             "InputSeed": "",
             "Options": {
+                "RO_LOGIC": 4,
                 "RO_HINTS_BOSS_REMAINS": 1,
                 "RO_HINTS_GOSSIP_STONES": 1,
                 "RO_HINTS_HOOKSHOT": 1,

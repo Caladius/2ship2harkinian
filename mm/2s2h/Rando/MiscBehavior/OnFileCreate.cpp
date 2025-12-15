@@ -267,6 +267,18 @@ void Rando::MiscBehavior::OnFileCreate(s16 fileNum) {
                     }
                 }
 
+                // Link's Pocket for Deckscrubber Logic
+                if (RANDO_SAVE_OPTIONS[RO_LOGIC] == RO_LOGIC_DECKSCRUBBER) {
+                    RandoItemId remainsRoll = (RandoItemId)((uint16_t)RI_REMAINS_GOHT + (rand() % 4));
+                    for (int i = 0; i < 2; i++) {
+                        auto it = std::find(itemPool.begin(), itemPool.end(), remainsRoll);
+                        if (it != itemPool.end()) {
+                            itemPool.erase(it);
+                        }
+                    }
+                    startingItems.push_back(remainsRoll);
+                }
+
                 // Shuffle Triforce Pieces into the Pool
                 int piecesShuffled = 0;
                 if (RANDO_SAVE_OPTIONS[RO_SHUFFLE_TRIFORCE_PIECES] == RO_GENERIC_YES) {
@@ -442,6 +454,8 @@ void Rando::MiscBehavior::OnFileCreate(s16 fileNum) {
                     Rando::Logic::ApplyNearlyNoLogicToSaveContext(checkPool, itemPool);
                 } else if (RANDO_SAVE_OPTIONS[RO_LOGIC] == RO_LOGIC_GLITCHLESS) {
                     Rando::Logic::ApplyGlitchlessLogicToSaveContext(checkPool, itemPool);
+                } else if (RANDO_SAVE_OPTIONS[RO_LOGIC] == RO_LOGIC_DECKSCRUBBER) {
+                    Rando::Logic::ApplyDeckscrubberLogicToSaveContext(checkPool, itemPool);
                 } else {
                     throw std::runtime_error("Logic option not implemented: " +
                                              std::to_string(RANDO_SAVE_OPTIONS[RO_LOGIC]));
