@@ -17,8 +17,9 @@ std::vector<std::string> deckScrubberShuffles = {
 };
 
 std::vector<std::string> deckScrubberStarting = {
-    "Bunny Hood", "Full Wallets", "Hero's Shield", "Maps and Compasses", "Kokiri Sword", "Random Boss Remain",
-    "Ocarina of Time", "", "Song of Time",   
+    "Bunny Hood",   "Full Wallets",       "Hero's Shield",   "Maps and Compasses",
+    "Kokiri Sword", "Random Boss Remain", "Ocarina of Time", "",
+    "Song of Time",
 };
 
 std::vector<std::pair<std::string, std::string>> deckScrubberHints = {
