@@ -89,8 +89,8 @@ void ApplyRemainsHint(u16* textId, bool* loadFromMessageTable) {
               "local townfolk, will pay good money "
               "for their remains.";
     } else {
-        msg = "         %g{{boss}}%w:\n"
-              "Last seen in near %y{{location}}%w.";
+        msg = "%g{{boss}}%w was last seen in:\n"
+              "%y{{locations}}%w.";
 
         switch (remainsHintIndex) {
             case 1:
@@ -112,9 +112,22 @@ void ApplyRemainsHint(u16* textId, bool* loadFromMessageTable) {
         }
 
         icon = Rando::StaticData::GetIconForZMessage(randoItemId);
-        RandoCheckId randoCheckId = Rando::FindItemPlacement(randoItemId);
-        CustomMessage::Replace(&msg, "{{location}}",
-                               Ship_GetSceneName(Rando::StaticData::Checks[randoCheckId].sceneId));
+        std::vector<RandoCheckId> itemPlacements = Rando::FindMultiItemPlacement(randoItemId);
+        std::string locationStr = "";
+        if (!itemPlacements.empty()) {
+            locationStr = RANDO_SAVE_CHECKS[itemPlacements[0]].obtained
+                              ? "your %gpocket%w"
+                              : Ship_GetSceneName(Rando::StaticData::Checks[itemPlacements[0]].sceneId);
+            if (itemPlacements.size() > 1) {
+                locationStr += " %w&%y\n";
+                locationStr += RANDO_SAVE_CHECKS[itemPlacements[1]].obtained
+                                   ? "your %gpocket%w"
+                                   : Ship_GetSceneName(Rando::StaticData::Checks[itemPlacements[1]].sceneId);
+                CustomMessage::Replace(&msg, "{{locations}}", locationStr);
+            }
+        } else {
+            CustomMessage::Replace(&msg, "{{locations}}", "%gLinks pocket%w");
+        }
     }
 
     CustomMessage::Entry entry = {
