@@ -24,6 +24,7 @@ RandoItemId CurrentJunkItem();
 bool IsItemObtainable(RandoItemId randoItemId, RandoCheckId randoCheckId = RC_UNKNOWN);
 RandoItemId ConvertItem(RandoItemId randoItemId, RandoCheckId randoCheckId = RC_UNKNOWN);
 RandoCheckId FindItemPlacement(RandoItemId randoItemId);
+std::vector<RandoCheckId> FindMultiItemPlacement(RandoItemId randoItemId);
 void RegisterMenu();
 
 } // namespace Rando

@@ -24,9 +24,8 @@ void ApplyTransformationHints(u16* textId, bool* loadFromMessageTable) {
               "The souls of the departed lay restless, "
               "find and heal them!";
     } else {
-        msg = "       %g{{mask}}%w:\n"
-              "Last seen in\n"
-              "%y{{location}}%w";
+        msg = "%g{{mask}}%w:\n"
+              "%y{{locations}}%w";
 
         switch (transformHintIndex) {
             case 1:
@@ -46,12 +45,18 @@ void ApplyTransformationHints(u16* textId, bool* loadFromMessageTable) {
         }
 
         icon = Rando::StaticData::GetIconForZMessage(randoItemId);
-        RandoCheckId randoCheckId = Rando::FindItemPlacement(randoItemId);
-        if (RANDO_SAVE_CHECKS[randoCheckId].obtained == true) {
-            CustomMessage::Replace(&msg, "{{location}}", "your %gpocket%w!");
-        } else {
-            CustomMessage::Replace(&msg, "{{location}}",
-                                   Ship_GetSceneName(Rando::StaticData::Checks[randoCheckId].sceneId));
+        std::vector<RandoCheckId> itemPlacements = Rando::FindMultiItemPlacement(randoItemId);
+        std::string locationStr = "";
+        if (!itemPlacements.empty()) {
+            locationStr = RANDO_SAVE_CHECKS[itemPlacements[0]].obtained
+                ? "your %gpocket%w" : Ship_GetSceneName(Rando::StaticData::Checks[itemPlacements[0]].sceneId);
+            if (itemPlacements.size() > 1) {
+                locationStr += " %w&%y\n";
+                locationStr += RANDO_SAVE_CHECKS[itemPlacements[1]].obtained
+                                   ? "your %gpocket%w"
+                                   : Ship_GetSceneName(Rando::StaticData::Checks[itemPlacements[1]].sceneId);
+                CustomMessage::Replace(&msg, "{{locations}}", locationStr);
+            }
             msg += ".";
         }
     }
