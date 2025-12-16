@@ -25,7 +25,7 @@ void ApplyTransformationHints(u16* textId, bool* loadFromMessageTable) {
               "find and heal them!";
     } else {
         msg = "%g{{mask}}%w:\n"
-              "%y{{locations}}%w";
+              "%y{{locations}}%w.";
 
         switch (transformHintIndex) {
             case 1:
@@ -48,16 +48,26 @@ void ApplyTransformationHints(u16* textId, bool* loadFromMessageTable) {
         std::vector<RandoCheckId> itemPlacements = Rando::FindMultiItemPlacement(randoItemId);
         std::string locationStr = "";
         if (!itemPlacements.empty()) {
-            locationStr = RANDO_SAVE_CHECKS[itemPlacements[0]].obtained
-                ? "your %gpocket%w" : Ship_GetSceneName(Rando::StaticData::Checks[itemPlacements[0]].sceneId);
-            if (itemPlacements.size() > 1) {
-                locationStr += " %w&%y\n";
-                locationStr += RANDO_SAVE_CHECKS[itemPlacements[1]].obtained
-                                   ? "your %gpocket%w"
-                                   : Ship_GetSceneName(Rando::StaticData::Checks[itemPlacements[1]].sceneId);
-                CustomMessage::Replace(&msg, "{{locations}}", locationStr);
+            for (int i = 0; i < itemPlacements.size(); i++) {
+                if (RANDO_SAVE_CHECKS[itemPlacements[i]].obtained) {
+                    itemPlacements[i] = RC_UNKNOWN;
+                }
             }
-            msg += ".";
+            for (auto& location : itemPlacements) {
+                if (location == RC_UNKNOWN) {
+                    locationStr = "%gLinks pocket%w";
+                    break;
+                }
+
+                if (locationStr != "") {
+                    locationStr += " %w&%y\n";
+                }
+
+                locationStr += Ship_GetSceneName(Rando::StaticData::Checks[location].sceneId);
+            }
+            CustomMessage::Replace(&msg, "{{locations}}", locationStr);
+        } else {
+            CustomMessage::Replace(&msg, "{{locations}}", "%gLinks pocket%w");
         }
     }
 
@@ -115,16 +125,24 @@ void ApplyRemainsHint(u16* textId, bool* loadFromMessageTable) {
         std::vector<RandoCheckId> itemPlacements = Rando::FindMultiItemPlacement(randoItemId);
         std::string locationStr = "";
         if (!itemPlacements.empty()) {
-            locationStr = RANDO_SAVE_CHECKS[itemPlacements[0]].obtained
-                              ? "your %gpocket%w"
-                              : Ship_GetSceneName(Rando::StaticData::Checks[itemPlacements[0]].sceneId);
-            if (itemPlacements.size() > 1) {
-                locationStr += " %w&%y\n";
-                locationStr += RANDO_SAVE_CHECKS[itemPlacements[1]].obtained
-                                   ? "your %gpocket%w"
-                                   : Ship_GetSceneName(Rando::StaticData::Checks[itemPlacements[1]].sceneId);
-                CustomMessage::Replace(&msg, "{{locations}}", locationStr);
+            for (int i = 0; i < itemPlacements.size(); i++) {
+                if (RANDO_SAVE_CHECKS[itemPlacements[i]].obtained) {
+                    itemPlacements[i] = RC_UNKNOWN;
+                }
             }
+            for (auto& location : itemPlacements) {
+                if (location == RC_UNKNOWN) {
+                    locationStr = "%gLinks pocket%w";
+                    break;
+                }
+
+                if (locationStr != "") {
+                    locationStr += " %w&%y\n";
+                }
+
+                locationStr += Ship_GetSceneName(Rando::StaticData::Checks[location].sceneId);
+            }
+            CustomMessage::Replace(&msg, "{{locations}}", locationStr);
         } else {
             CustomMessage::Replace(&msg, "{{locations}}", "%gLinks pocket%w");
         }
