@@ -321,7 +321,7 @@ nlohmann::json deckScrubberJ = R"(
                 "AlwaysWinDoggyRace": 1,
                 "CuccoShackCuccoCount": 1,
                 "SwampArcheryScore": 2179,
-                "TownArcheryScore": 50
+                "SkipLittleBeaver": 1
             },
             "Playback": {
                 "DpadOcarina": 1,
