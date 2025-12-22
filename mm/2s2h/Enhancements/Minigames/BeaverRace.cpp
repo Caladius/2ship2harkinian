@@ -79,7 +79,6 @@ void RegisterBeaverRaceSpeedup() {
 
         CustomMessage::LoadCustomMessageIntoFont(entry);
         *loadFromMessageTable = false;
-        SPDLOG_INFO("Entry: {}", entry.msg);
     });
 
     COND_ID_HOOK(OnOpenText, 0x10FA, CVAR_SPEEDUP, [](u16* textId, bool* loadFromMessageTable) {
@@ -89,7 +88,6 @@ void RegisterBeaverRaceSpeedup() {
 
         CustomMessage::LoadCustomMessageIntoFont(entry);
         *loadFromMessageTable = false;
-        SPDLOG_INFO("Entry: {}", entry.msg);
     });
 }
 
