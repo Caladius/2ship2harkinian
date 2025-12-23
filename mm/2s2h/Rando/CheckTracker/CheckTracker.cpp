@@ -32,14 +32,14 @@ static std::unordered_map<s32, s32> betterSceneIndex = {
 #undef DEFINE_SCENE
 #undef DEFINE_SCENE_UNSET
 
-#define CVAR_NAME_SHOW_CHECK_TRACKER "gWindows.CheckTracker"
-#define CVAR_NAME_SHOW_LOGIC "gRando.CheckTracker.OnlyShowChecksInLogic"
-#define CVAR_NAME_HIDE_COLLECTED "gRando.CheckTracker.HideCollectedChecks"
-#define CVAR_NAME_HIDE_SKIPPED "gRando.CheckTracker.HideSkippedChecks"
-#define CVAR_NAME_SCROLL_TO_SCENE "gRando.CheckTracker.ScrollToCurrentScene"
-#define CVAR_NAME_TRACKER_OPACITY "gRando.CheckTracker.Opacity"
-#define CVAR_NAME_TRACKER_SCALE "gRando.CheckTracker.Scale"
-#define CVAR_NAME_SHOW_CURRENT_SCENE "gRando.CheckTracker.ShowCurrentScene"
+#define CVAR_NAME_SHOW_CHECK_TRACKER "gCheckTracker.Enable"
+#define CVAR_NAME_SHOW_LOGIC "gCheckTracker.OnlyShowChecksInLogic"
+#define CVAR_NAME_HIDE_COLLECTED "gCheckTracker.HideCollectedChecks"
+#define CVAR_NAME_HIDE_SKIPPED "gCheckTracker.HideSkippedChecks"
+#define CVAR_NAME_SCROLL_TO_SCENE "gCheckTracker.ScrollToCurrentScene"
+#define CVAR_NAME_TRACKER_OPACITY "gCheckTracker.Opacity"
+#define CVAR_NAME_TRACKER_SCALE "gCheckTracker.Scale"
+#define CVAR_NAME_SHOW_CURRENT_SCENE "gCheckTracker.ShowCurrentScene"
 #define CVAR_SHOW_CHECK_TRACKER CVarGetInteger(CVAR_NAME_SHOW_CHECK_TRACKER, 0)
 #define CVAR_SHOW_LOGIC CVarGetInteger(CVAR_NAME_SHOW_LOGIC, 0)
 #define CVAR_HIDE_COLLECTED CVarGetInteger(CVAR_NAME_HIDE_COLLECTED, 0)
