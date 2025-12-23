@@ -256,6 +256,151 @@ nlohmann::json curatedPresetJ = R"(
 }
 )"_json;
 
+nlohmann::json deckScrubberJ = R"(
+{
+	"ClearCVars": [
+        "gCheats",
+        "gCollisionViewer",
+        "gDeveloperTools",
+        "gEnhancements",
+        "gEventLog",
+        "gFixes",
+        "gModes",
+        "gNetwork",
+        "gNotifications",
+        "gRando"
+    ],
+    "CVars": {
+        "gCheats": {
+            "EasyFrameAdvance": 1
+        },
+        "gEnhancements": {
+            "Cutscenes": {
+                "SkipEnemyCutscenes": 1,
+                "SkipEntranceCutscenes": 1,
+                "SkipFirstCycle": 1,
+                "SkipGetItemCutscenes": 1,
+                "SkipIntroSequence": 1,
+                "SkipMiscInteractions": 1,
+                "SkipOnePointCutscenes": 1,
+                "SkipStoryCutscenes": 1,
+                "SkipToFileSelect": 1
+            },
+            "Dialogue": {
+                "AutoBombersCode": 1,
+                "FastBankSelection": 1,
+                "FastText": 1
+            },
+            "DifficultyOptions": {
+                "DekuGuardSearchBalls": 1,
+                "LowerBankRewardThresholds": 1
+            },
+            "Dpad": {
+                "DpadEquips": 1
+            },
+            "Equipment": {
+                "BetterPictoMessage": 1,
+                "ChuDrops": 1,
+                "MagicArrowEquipSpeed": 1,
+                "TwoHandedSwordSpinAttack": 1
+            },
+            "Fixes": {
+                "CompletedHeartContainerAudio": 1,
+                "ControlCharacters": 1,
+                "FierceDeityZTargetMovement": 1
+            },
+            "Masks": {
+                "FastTransformation": 1,
+                "FierceDeitysAnywhere": 1,
+                "NoBlastMaskCooldown": 1,
+                "PersistentBunnyHood": {
+                    "Enabled": 1
+                }
+            },
+            "Minigames": {
+                "AlwaysWinDoggyRace": 1,
+                "CuccoShackCuccoCount": 1,
+                "SwampArcheryScore": 2179,
+                "SkipLittleBeaver": 1
+            },
+            "Playback": {
+                "DpadOcarina": 1,
+                "NoDropOcarinaInput": 1,
+                "SkipScarecrowSong": 1
+            },
+            "Player": {
+                "ClimbSpeed": 2,
+                "FasterPushAndPull": 1,
+                "FierceDeityPutaway": 1,
+                "InstantPutaway": 1
+            },
+            "PlayerActions": {
+                "ArrowCycle": 1,
+                "InstantRecall": 1
+            },
+            "Restorations": {
+                "PowerCrouchStab": 2,
+                "WoodfallMountainAppearance": 1
+            },
+            "Saving": {
+                "PauseSave": 1
+            },
+            "Songs": {
+                "BetterSongOfDoubleTime": 1,
+                "FasterSongPlayback": 1,
+                "ZoraEggCount": 1
+            },
+            "Timesavers": {
+                "DampeDiggingSkip": 1,
+                "FastChests": 1,
+                "FasterSceneTransitions": 1,
+                "GalleryTwofer": 1,
+                "MarineLabHP": 1,
+                "SkipBalladOfWindfish": 1,
+                "SwampBoatSpeed": 1
+            }
+        },
+        "gFixes": {
+            "FixAmmoCountEnvColor": 1,
+            "FixEponaStealingSword": 1,
+            "FixIkanaGreatFairyFountainColor": 1
+        },
+        "gRando": {
+            "Enabled": 1,
+            "InputSeed": "",
+            "Options": {
+                "RO_LOGIC": 4,
+                "RO_HINTS_BOSS_REMAINS": 1,
+                "RO_HINTS_GOSSIP_STONES": 1,
+                "RO_HINTS_HOOKSHOT": 1,
+                "RO_HINTS_OATH_TO_ORDER": 1,
+                "RO_HINTS_SPIDER_HOUSES": 1,
+				"RO_HINTS_TRANSFORMATIONS": 1,
+                "RO_MINIMUM_STRAY_FAIRIES": 5,
+                "RO_PLENTIFUL_ITEMS": 1,
+                "RO_SHUFFLE_BOSS_REMAINS": 1,
+                "RO_SHUFFLE_GOLD_SKULLTULAS": 0,
+                "RO_SHUFFLE_OWL_STATUES": 1,
+                "RO_SHUFFLE_SHOPS": 1,
+                "RO_SHUFFLE_TRAPS": 1,
+                "RO_STARTING_MAPS_AND_COMPASSES": 1,
+                "RO_STARTING_RUPEES": 1,
+                "RO_TRAP_AMOUNT": 6
+            },
+            "SpoilerFile": "",
+            "SpoilerFileIndex": 0,
+            "StartingItems": "109,126,91,146,66",
+            "Traps": {
+                "Freeze": 1,
+                "Shock": 1
+            }
+        }
+    },
+    "type": "2S2H_PRESET",
+    "version": 1
+}
+)"_json;
+
 std::unordered_map<std::string, std::pair<nlohmann::json, std::set<std::string>>> presets = {};
 const std::filesystem::path presetsFolderPath(Ship::Context::GetPathRelativeToAppDirectory("presets", appShortName));
 
@@ -264,6 +409,7 @@ void PresetManager_RefreshPresets() {
     presets.insert(
         { "Defaults (Everything Off)", { defaultsPresetJ, { "Developer Tools", "Enhancements", "HUD", "Rando" } } });
     presets.insert({ "Curated", { curatedPresetJ, { "Developer Tools", "Enhancements", "HUD" } } });
+    presets.insert({ "Deckscrubber v3", { deckScrubberJ, { "Developer Tools", "Enhancements", "HUD", "Rando" } } });
 
     // ensure the presets folder exists
     if (!std::filesystem::exists(presetsFolderPath)) {

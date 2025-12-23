@@ -4,6 +4,8 @@
 #include "Rando/CheckTracker/CheckTracker.h"
 #include "build.h"
 #include "2s2h/BenGui/BenMenu.h"
+#include "PresetManager/PresetManager.h"
+#include "PresetManager/PresetDescriptions.h"
 
 extern "C" {
 #include "overlays/actors/ovl_En_Sth/z_en_sth.h"
@@ -11,10 +13,9 @@ extern "C" {
 
 // TODO: This block should come from elsewhere, tied to data in Rando::StaticData::Options
 std::unordered_map<int32_t, const char*> logicOptions = {
-    { RO_LOGIC_GLITCHLESS, "Glitchless" },
-    { RO_LOGIC_NO_LOGIC, "No Logic" },
-    { RO_LOGIC_NEARLY_NO_LOGIC, "Nearly No Logic" },
-    { RO_LOGIC_VANILLA, "Vanilla" },
+    { RO_LOGIC_GLITCHLESS, "Glitchless" },           { RO_LOGIC_NO_LOGIC, "No Logic" },
+    { RO_LOGIC_NEARLY_NO_LOGIC, "Nearly No Logic" }, { RO_LOGIC_VANILLA, "Vanilla" },
+    { RO_LOGIC_DECKSCRUBBER, "Deckscrubber" },
 };
 
 std::unordered_map<int32_t, const char*> accessDungeonOptions = {
@@ -154,10 +155,12 @@ static void DrawGeneralTab() {
     UIWidgets::CVarCheckbox("Container Style Matches Contents", "gRando.CSMC");
     UIWidgets::Tooltip("This will make the contents of a container match the container itself. This currently only "
                        "applies to chests and pots.");
-    UIWidgets::WindowButton("Check Tracker", "gWindows.CheckTracker", BenGui::mRandoCheckTrackerWindow,
-                            { .size = ImVec2((ImGui::GetContentRegionAvail().x - 48.0f), 40.0f) });
+    UIWidgets::WindowButton("Check Tracker", "gCheckTracker.Enable", BenGui::mRandoCheckTrackerWindow,
+                            { .size = ImVec2((ImGui::GetContentRegionAvail().x - 48.0f), 40.0f),
+                              .color = BenGui::mBenMenu->GetMenuThemeColor() });
     ImGui::SameLine();
-    if (UIWidgets::Button(ICON_FA_COG, { .size = ImVec2(40.0f, 40.0f) })) {
+    if (UIWidgets::Button(ICON_FA_COG,
+                          { .size = ImVec2(40.0f, 40.0f), .color = BenGui::mBenMenu->GetMenuThemeColor() })) {
         BenGui::mRandoCheckTrackerSettingsWindow->ToggleVisibility();
     }
     ImGui::EndChild();
@@ -724,8 +727,7 @@ static void DrawCheckFilterTab() {
 
 static void DrawHintsTab() {
     f32 columnWidth = ImGui::GetContentRegionAvail().x / 3 - (ImGui::GetStyle().ItemSpacing.x * 2);
-    f32 halfHeight = ImGui::GetContentRegionAvail().y / 2 - (ImGui::GetStyle().ItemSpacing.y * 2);
-    ImGui::BeginChild("randoHintsColumn1", ImVec2(columnWidth, halfHeight));
+    ImGui::BeginChild("randoHintsColumn1", ImVec2(columnWidth, ImGui::GetContentRegionAvail().y));
     CVarCheckbox(
         "Spider House", Rando::StaticData::Options[RO_HINTS_SPIDER_HOUSES].cvar,
         CheckboxOptions(
@@ -749,16 +751,10 @@ static void DrawHintsTab() {
     CVarCheckbox("Oath to Order", Rando::StaticData::Options[RO_HINTS_OATH_TO_ORDER].cvar,
                  CheckboxOptions({ { .tooltip = "Once you have the Moon Access Requirements, talking to Skull Kid on "
                                                 "the Clock Tower Rooftop will hint the location of Oath to Order" } }));
-    CVarCheckbox(
-        "General Actor Hints", "gPlaceholderBool",
-        CheckboxOptions({ { .disabled = true,
-                            .disabledTooltip = "Soon you will be able to disable these. Currently hinted:\n- Bomb Shop "
-                                               "4th Item\n- Lottery\n- Great Fairy Fountains\n- Mountain Smithy" } })
-            .DefaultValue(true));
-    CVarCheckbox("Saria's Song", "gPlaceholderBool",
-                 CheckboxOptions({ { .disabled = true, .disabledTooltip = "Coming Soon" } }));
-    CVarCheckbox("Song of Soaring", "gPlaceholderBool",
-                 CheckboxOptions({ { .disabled = true, .disabledTooltip = "Coming Soon" } }));
+    CVarCheckbox("Transformation Masks", Rando::StaticData::Options[RO_HINTS_TRANSFORMATIONS].cvar,
+                 CheckboxOptions({ { .tooltip = "Checking the sign near the Business Scrub in South Clock Town "
+                                                "will reveal the location of Transformation Masks.\n"
+                                                "Note: This excludes Fierce Deity." } }));
     CVarCheckbox(
         "Hookshot Location", Rando::StaticData::Options[RO_HINTS_HOOKSHOT].cvar,
         CheckboxOptions(
@@ -767,10 +763,30 @@ static void DrawHintsTab() {
     ImGui::EndChild();
 }
 
+void DrawRacesTab() {
+    ImGui::BeginChild("randoRacesColumn1", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y));
+    ImGui::Text("Apply the Deckscrubber Race Preset and then create your File.");
+    ImGui::PushID("DeckscrubberSet");
+    if (UIWidgets::Button("Apply Preset", { .color = COLOR_GREEN })) {
+        PresetManager_ApplyPreset(deckScrubberJ);
+    }
+    DrawDeckScrubberDescription();
+    ImGui::PopID();
+    ImGui::EndChild();
+}
+
 void Rando::RegisterMenu() {
     mBenMenu->AddMenuEntry("Rando", "gSettings.Menu.RandoSidebarSection");
+
+    // New Race Menu
+    mBenMenu->AddSidebarEntry("Rando", "Races", 1);
+    WidgetPath path = { "Rando", "Races", SECTION_COLUMN_1 };
+    path.sidebarName = "Races";
+    mBenMenu->AddWidget(path, "Races", WIDGET_CUSTOM).CustomFunction([](WidgetInfo& info) { DrawRacesTab(); });
+
+    // Existing Rando Menu
     mBenMenu->AddSidebarEntry("Rando", "General", 1);
-    WidgetPath path = { "Rando", "General", SECTION_COLUMN_1 };
+    path = { "Rando", "General", SECTION_COLUMN_1 };
     mBenMenu->AddWidget(path, "General", WIDGET_CUSTOM).CustomFunction([](WidgetInfo& info) { DrawGeneralTab(); });
     mBenMenu->AddSidebarEntry("Rando", "Logic/Conditions", 1);
     path.sidebarName = "Logic/Conditions";

@@ -169,7 +169,7 @@ void SetupGuiElements() {
     mNotificationWindow->Show();
 
     mRandoCheckTrackerWindow = std::make_shared<Rando::CheckTracker::CheckTrackerWindow>(
-        "gWindows.CheckTracker", "Check Tracker", ImVec2(375, 460));
+        "gCheckTracker.Enable", "Check Tracker", ImVec2(375, 460));
     gui->AddGuiWindow(mRandoCheckTrackerWindow);
 
     mRandoCheckTrackerSettingsWindow = std::make_shared<Rando::CheckTracker::SettingsWindow>(
