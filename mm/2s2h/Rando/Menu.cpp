@@ -155,10 +155,12 @@ static void DrawGeneralTab() {
     UIWidgets::CVarCheckbox("Container Style Matches Contents", "gRando.CSMC");
     UIWidgets::Tooltip("This will make the contents of a container match the container itself. This currently only "
                        "applies to chests and pots.");
-    UIWidgets::WindowButton("Check Tracker", "gWindows.CheckTracker", BenGui::mRandoCheckTrackerWindow,
-                            { .size = ImVec2((ImGui::GetContentRegionAvail().x - 48.0f), 40.0f) });
+    UIWidgets::WindowButton("Check Tracker", "gCheckTracker.Enable", BenGui::mRandoCheckTrackerWindow,
+                            { .size = ImVec2((ImGui::GetContentRegionAvail().x - 48.0f), 40.0f),
+                              .color = BenGui::mBenMenu->GetMenuThemeColor() });
     ImGui::SameLine();
-    if (UIWidgets::Button(ICON_FA_COG, { .size = ImVec2(40.0f, 40.0f) })) {
+    if (UIWidgets::Button(ICON_FA_COG,
+                          { .size = ImVec2(40.0f, 40.0f), .color = BenGui::mBenMenu->GetMenuThemeColor() })) {
         BenGui::mRandoCheckTrackerSettingsWindow->ToggleVisibility();
     }
     ImGui::EndChild();
